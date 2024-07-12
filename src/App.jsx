@@ -1,8 +1,8 @@
-import React from "react";
 import TopButtons from "./components/TopButtons";
 import Inputs from "./components/Inputs";
 import TimeAndLocation from "./components/TimeAndLocation";
 import TempAndDetails from "./components/TempAndDetails";
+import Forecast from "./components/Forecast"
 
 const App = () => {
   return (
@@ -15,6 +15,8 @@ const App = () => {
       <Inputs />
       <TimeAndLocation />
       <TempAndDetails />
+      <Forecast />
+      <Forecast />
     </div>
   );
 };
