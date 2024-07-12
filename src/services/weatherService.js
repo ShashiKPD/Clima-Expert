@@ -1,4 +1,4 @@
-import axios, { Axios } from "axios";
+import axios from "axios";
 import { DateTime } from "luxon";
 
 const API_KEY = "3b7b5907d06cf32052a4cc34807a1c08";
@@ -8,6 +8,8 @@ const getWeatherData = async (infoType, searchParams) => {
   const url = BASE_URL + infoType + "?q=" + searchParams + "&appid=" + API_KEY;
   return await axios.get(url);
 };
+
+const iconUrlFromCode = (icon) => `http://openweathermap.org/img.wn/${icon}@2x.png`;
 
 const formatToLocalTime = (
   secs,
@@ -25,21 +27,37 @@ const formatCurrent = (data) => {
     weather,
     wind: { speed },
     timezone,
-  } = data;
+  } = data.data;
 
   const { main: details, icon } = weather[0];
   const formattedLocalTime = formatToLocalTime(dt, timezone);
 
-  return {};
+  return {
+    temp,
+    feels_like,
+    temp_min,
+    temp_max,
+    humidity,
+    name,
+    country,
+    sunrise: formatToLocalTime(sunrise, timezone, 'hh:mm a'),
+    sunset: formatToLocalTime(sunset, timezone, 'hh:mm a'),
+    speed,
+    details,
+    icon: iconUrlFromCode(icon),
+    formattedLocalTime
+  };
 };
 
 const getFormattedWeatherData = async (searchParams) => {
-  const formattedCurrentWeather = await getWeatherData(
-    "weather",
-    searchParams
-  ).then((data) => formatCurrent(data));
-
-  return { ...formatCurrentWeather };
+  try {
+    const weatherData = await getWeatherData("weather", searchParams);
+    const formattedCurrentWeather = formatCurrent(weatherData);
+    return formattedCurrentWeather;
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    throw error;
+  }
 };
 
-export default getWeatherData;
+export default getFormattedWeatherData;

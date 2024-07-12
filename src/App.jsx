@@ -4,17 +4,20 @@ import TimeAndLocation from "./components/TimeAndLocation";
 import TempAndDetails from "./components/TempAndDetails";
 import Forecast from "./components/Forecast";
 import { useEffect } from "react";
-import getWeatherData from "./services/weatherService";
+import getFormattedWeatherData from "./services/weatherService";
 
 const App = () => {
   useEffect(() => {
-    getWeatherData("weather", "London")
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    const fetchData = async () => {
+      try {
+        const response = await getFormattedWeatherData("London");
+        console.log(response);
+      } catch (error) {
+        console.error("Error fetching data in App component:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
