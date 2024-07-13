@@ -24,11 +24,11 @@ const App = () => {
       toast.info(
         `Fetching weather data for ${capitalizeFirstLetter(cityName)}`
       );
-      await getFormattedWeatherData({ ...query, units }).then((data) => {
-        toast.success(`Fetched weather data for ${data.name}, ${data.country}`);
-        setWeather(data);
-      });
-    }catch (error) {
+      const data = await getFormattedWeatherData({ ...query, units });
+      // Update state with the fetched weather data
+      setWeather(data);
+      toast.success(`Fetched weather data for ${data.name}, ${data.country}`);
+    } catch (error) {
       console.error("Error fetching data in App component:", error);
     }
   };
