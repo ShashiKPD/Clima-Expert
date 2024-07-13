@@ -5,15 +5,18 @@ const Inputs = ({ setQuery, setUnits }) => {
   const [city, setCity] = useState("");
 
   const handleSearchClick = () => {
-    if (city !== "") setQuery({q: city});
+    if (city !== "") setQuery({ q: city });
+    console.log("search button clicked")
   };
 
   const handleLocationClick = () => {
-    if(navigator.geolocation){
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        const {latitude, longitude} = position.coords
-        setQuery({lat: latitude, lon: longitude})
-      })
+        const { latitude, longitude } = position.coords;
+        setQuery({ lat: latitude, lon: longitude });
+        console.log("location button clicked")
+
+      });
     }
   };
 
@@ -43,7 +46,7 @@ const Inputs = ({ setQuery, setUnits }) => {
           size={30}
           className="cursor-pointer
         transition ease-out hover:scale-125"
-        onClick={handleLocationClick}
+          onClick={handleLocationClick}
         />
       </div>
 
