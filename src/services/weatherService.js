@@ -1,13 +1,15 @@
 import axios from "axios";
 import { DateTime } from "luxon";
 
-const API_KEY = "1b9e8a590a0410a4879759e1046edda6";
+const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 const BASE_URL = "https://api.openweathermap.org/data/2.5/";
 
 // Get Weather Data
 
 const getWeatherData = async (infoType, searchParams) => {
-  const url = BASE_URL + infoType + "?q=" + searchParams + "&appid=" + API_KEY;
+  const url = new URL(BASE_URL + infoType);
+  url.search = new URLSearchParams({ ...searchParams, appid: API_KEY })
+  console.log(url)
   return await axios.get(url);
 };
 
@@ -22,6 +24,7 @@ const getForecastData = async (infoType, lat, lon) => {
 const iconUrlFromCode = (icon) =>
   `http://openweathermap.org/img/wn/${icon}@2x.png`;
 
+//format using luxon
 const formatToLocalTime = (
   secs,
   offset,
@@ -78,7 +81,7 @@ const getFormattedWeatherData = async (searchParams) => {
       forecastData.data.list
     );
 
-    return { formattedCurrentWeather, formattedForecastWeather };
+    return { ...formattedCurrentWeather, ...formattedForecastWeather };
   } catch (error) {
     console.error("Error fetching weather data:", error);
     throw error;

@@ -15,7 +15,7 @@ const Forecast = ({ title, data }) => {
           >
             <p className="font-light text-sm">{d.title}</p>
             <img src={d.icon} alt="weather icon" className="w-12 my-1" />
-            <p className="font-medium">{`${(d.temp - 273.15).toFixed(2)}°`}</p>
+            <p className="font-medium">{`${(d.temp - 273.15).toFixed()}°`}</p>
           </div>
         ))}
       </div>

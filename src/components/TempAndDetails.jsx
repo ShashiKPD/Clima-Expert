@@ -4,24 +4,27 @@ import { FiWind } from "react-icons/fi";
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import { GiSunrise, GiSunset } from "react-icons/gi";
 
-const TempAndDetails = (weather) => {
-  const details = weather.weather.formattedCurrentWeather.details;
-  const icon = weather.weather.formattedCurrentWeather.icon;
-  const temp = weather.weather.formattedCurrentWeather.temp;
-  const temp_min = weather.weather.formattedCurrentWeather.temp_min;
-  const temp_max = weather.weather.formattedCurrentWeather.temp_max;
-  const sunrise = weather.weather.formattedCurrentWeather.sunrise;
-  const sunset = weather.weather.formattedCurrentWeather.sunset;
-  const speed = weather.weather.formattedCurrentWeather.speed;
-  const humidity = weather.weather.formattedCurrentWeather.humidity;
-  const feels_like = weather.weather.formattedCurrentWeather.feels_like;
-
+const TempAndDetails = ({
+  weather: {
+    details,
+    icon,
+    temp,
+    temp_min,
+    temp_max,
+    sunrise,
+    sunset,
+    speed,
+    humidity,
+    feels_like,
+  },
+  units,
+}) => {
   const verticalDetails = [
     {
       id: 1,
       Icon: FaThermometerEmpty,
       title: "Real Feel",
-      value: `${(feels_like - 273.15).toFixed()}°`,
+      value: `${feels_like.toFixed()}°`,
     },
     {
       id: 2,
@@ -33,7 +36,7 @@ const TempAndDetails = (weather) => {
       id: 3,
       Icon: FiWind,
       title: "Wind",
-      value: `${speed.toFixed()} km/h`,
+      value: `${speed.toFixed()} ${units === "metric" ? "km/h" : "m/s"}`,
     },
   ];
   const horizontalDetails = [
@@ -53,13 +56,13 @@ const TempAndDetails = (weather) => {
       id: 3,
       Icon: MdKeyboardArrowUp,
       title: "High",
-      value: `${(temp_max - 273.15).toFixed()}°`,
+      value: `${temp_max.toFixed()}°`,
     },
     {
       id: 4,
       Icon: MdKeyboardArrowDown,
       title: "Low",
-      value: `${(temp_min - 273.15).toFixed()}°`,
+      value: `${temp_min.toFixed()}°`,
     },
   ];
 
@@ -70,7 +73,7 @@ const TempAndDetails = (weather) => {
       </div>
       <div className="flex flex-row items-center justify-between py-3">
         <img src={icon} alt="weather icon" className="w-20" />
-        <p className="text-5xl">{`${(temp - 273.15).toFixed()}°`}</p>
+        <p className="text-5xl">{`${temp.toFixed()}°`}</p>
 
         <div className="flex flex-col space-y-3 items-start">
           {verticalDetails.map(({ id, Icon, title, value }) => (
