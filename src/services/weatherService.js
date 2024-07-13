@@ -22,6 +22,7 @@ const getForecastData = async (infoType, lat, lon) => {
 const iconUrlFromCode = (icon) =>
   `http://openweathermap.org/img/wn/${icon}@2x.png`;
 
+//format using luxon
 const formatToLocalTime = (
   secs,
   offset,
@@ -78,7 +79,7 @@ const getFormattedWeatherData = async (searchParams) => {
       forecastData.data.list
     );
 
-    return { formattedCurrentWeather, formattedForecastWeather };
+    return { ...formattedCurrentWeather, ...formattedForecastWeather };
   } catch (error) {
     console.error("Error fetching weather data:", error);
     throw error;
