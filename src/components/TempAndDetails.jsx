@@ -15,10 +15,10 @@ const TempAndDetails = ({
     sunset,
     speed,
     humidity,
-    feels_like,
+    feels_like
   },
 }) => {
-  
+
   const verticalDetails = [
     {
       id: 1,

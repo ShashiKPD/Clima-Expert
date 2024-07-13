@@ -7,21 +7,21 @@ import { useEffect, useState } from "react";
 import getFormattedWeatherData from "./services/weatherService";
 
 const App = () => {
-  const [query, setQuery] = useState("London");
+  const [query, setQuery] = useState("Kolkata");
   const [units, setUnits] = useState("metric");
   const [weather, setWeather] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getFormattedWeatherData("Kolkata");
-        setWeather(response);
-      } catch (error) {
-        console.error("Error fetching data in App component:", error);
-      }
-    };
+  const fetchWeatherData = async () => {
+    try {
+      const response = await getFormattedWeatherData(query);
+      setWeather(response);
+    } catch (error) {
+      console.error("Error fetching data in App component:", error);
+    }
+  };
 
-    fetchData();
+  useEffect(() => {
+    fetchWeatherData();
   }, [query, units]);
 
   return (
@@ -30,7 +30,7 @@ const App = () => {
     py-5 px-32 bg-gradient-to-br shadow-xl shadow-gray-400 
     from bg-cyan-600 to-blue-700"
     >
-      <TopButtons />
+      <TopButtons setQuery={setQuery}/>
       <Inputs />
       {weather && (
         <>
