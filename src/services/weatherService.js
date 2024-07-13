@@ -1,7 +1,7 @@
 import axios from "axios";
 import { DateTime } from "luxon";
 
-const API_KEY = "1b9e8a590a0410a4879759e1046edda6";
+const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 const BASE_URL = "https://api.openweathermap.org/data/2.5/";
 
 // Get Weather Data
