@@ -1,15 +1,26 @@
 import axios from "axios";
 import { DateTime } from "luxon";
 
-const API_KEY = "3b7b5907d06cf32052a4cc34807a1c08";
+const API_KEY = "1b9e8a590a0410a4879759e1046edda6";
 const BASE_URL = "https://api.openweathermap.org/data/2.5/";
+
+// Get Weather Data
 
 const getWeatherData = async (infoType, searchParams) => {
   const url = BASE_URL + infoType + "?q=" + searchParams + "&appid=" + API_KEY;
   return await axios.get(url);
 };
 
-const iconUrlFromCode = (icon) => `http://openweathermap.org/img.wn/${icon}@2x.png`;
+// Get Forecast Data
+
+const getForecastData = async (infoType, lat, lon) => {
+  const url =
+    BASE_URL + infoType + "?lat=" + lat + "&lon=" + lon + "&appid=" + API_KEY;
+  return await axios.get(url);
+};
+
+const iconUrlFromCode = (icon) =>
+  `http://openweathermap.org/img/wn/${icon}@2x.png`;
 
 const formatToLocalTime = (
   secs,
@@ -33,6 +44,8 @@ const formatCurrent = (data) => {
   const formattedLocalTime = formatToLocalTime(dt, timezone);
 
   return {
+    lat,
+    lon,
     temp,
     feels_like,
     temp_min,
@@ -40,12 +53,14 @@ const formatCurrent = (data) => {
     humidity,
     name,
     country,
-    sunrise: formatToLocalTime(sunrise, timezone, 'hh:mm a'),
-    sunset: formatToLocalTime(sunset, timezone, 'hh:mm a'),
+    sunrise: formatToLocalTime(sunrise, timezone, "hh:mm a"),
+    sunset: formatToLocalTime(sunset, timezone, "hh:mm a"),
     speed,
     details,
     icon: iconUrlFromCode(icon),
-    formattedLocalTime
+    formattedLocalTime,
+    dt,
+    timezone,
   };
 };
 
@@ -53,11 +68,46 @@ const getFormattedWeatherData = async (searchParams) => {
   try {
     const weatherData = await getWeatherData("weather", searchParams);
     const formattedCurrentWeather = formatCurrent(weatherData);
-    return formattedCurrentWeather;
+
+    const { dt, lat, lon, timezone } = formattedCurrentWeather;
+
+    const forecastData = await getForecastData("forecast", lat, lon);
+    const formattedForecastWeather = formatForecastWeather(
+      dt,
+      timezone,
+      forecastData.data.list
+    );
+
+    return { formattedCurrentWeather, formattedForecastWeather };
   } catch (error) {
     console.error("Error fetching weather data:", error);
     throw error;
   }
+};
+
+const formatForecastWeather = (secs, offset, data) => {
+  // hourly
+  const hourly = data
+    .filter((f) => f.dt > secs)
+    .map((f) => ({
+      temp: f.main.temp,
+      title: formatToLocalTime(f.dt, offset, "hh:mm a"),
+      icon: iconUrlFromCode(f.weather[0].icon),
+      date: f.dt_txt,
+    }))
+    .slice(0, 5);
+
+  // daily
+  const daily = data
+    .filter((f) => f.dt_txt.slice(-8) === "00:00:00")
+    .map((f) => ({
+      temp: f.main.temp,
+      title: formatToLocalTime(f.dt, offset, "ccc"),
+      icon: iconUrlFromCode(f.weather[0].icon),
+      date: f.dt_txt,
+    }));
+
+  return { hourly, daily };
 };
 
 export default getFormattedWeatherData;

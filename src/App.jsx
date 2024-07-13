@@ -3,22 +3,26 @@ import Inputs from "./components/Inputs";
 import TimeAndLocation from "./components/TimeAndLocation";
 import TempAndDetails from "./components/TempAndDetails";
 import Forecast from "./components/Forecast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import getFormattedWeatherData from "./services/weatherService";
 
 const App = () => {
+  const [query, setQuery] = useState("London");
+  const [units, setUnits] = useState("metric");
+  const [weather, setWeather] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getFormattedWeatherData("London");
-        console.log(response);
+        const response = await getFormattedWeatherData("Kolkata");
+        setWeather(response);
       } catch (error) {
         console.error("Error fetching data in App component:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [query, units]);
 
   return (
     <div
@@ -28,10 +32,20 @@ const App = () => {
     >
       <TopButtons />
       <Inputs />
-      <TimeAndLocation />
-      <TempAndDetails />
-      <Forecast />
-      <Forecast />
+      {weather && (
+        <>
+          <TimeAndLocation weather={weather} />
+          <TempAndDetails weather={weather} />
+          <Forecast
+            title="3 hour step forecast"
+            data={weather.formattedForecastWeather.hourly}
+          />
+          <Forecast
+            title="Daily Forecast"
+            data={weather.formattedForecastWeather.daily}
+          />
+        </>
+      )}
     </div>
   );
 };
