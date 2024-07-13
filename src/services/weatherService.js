@@ -7,7 +7,8 @@ const BASE_URL = "https://api.openweathermap.org/data/2.5/";
 // Get Weather Data
 
 const getWeatherData = async (infoType, searchParams) => {
-  const url = BASE_URL + infoType + "?q=" + searchParams + "&appid=" + API_KEY;
+  const url = new URL(BASE_URL + infoType);
+  url.search = new URLSearchParams({...searchParams, appid: API_KEY})
   return await axios.get(url);
 };
 

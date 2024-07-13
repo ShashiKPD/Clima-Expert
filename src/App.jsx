@@ -13,7 +13,7 @@ const App = () => {
 
   const fetchWeatherData = async () => {
     try {
-      const response = await getFormattedWeatherData(query);
+      const response = await getFormattedWeatherData({q:query, units});
       setWeather(response);
     } catch (error) {
       console.error("Error fetching data in App component:", error);
@@ -24,11 +24,17 @@ const App = () => {
     fetchWeatherData();
   }, [query, units]);
 
+  const formatBackground = () => {
+    if (!weather) return 'from-bg-cyan-600 to-blue-700';
+    const threshold = units === "metric" ? 20 : 60;
+    if (weather.temp <= threshold) return "from-cyan-600 to-blue-700";
+    return "from-yellow-600 to-orange-700"
+  }
+
   return (
     <div
-      className="mx-auto max-w-screen-lg mt-4 
-    py-5 px-32 bg-gradient-to-br shadow-xl shadow-gray-400 
-    from bg-cyan-600 to-blue-700"
+      className={`mx-auto max-w-screen-lg mt-4 
+    py-5 px-32 bg-gradient-to-br shadow-xl shadow-gray-400 ${formatBackground()}`}
     >
       <TopButtons setQuery={setQuery}/>
       <Inputs />

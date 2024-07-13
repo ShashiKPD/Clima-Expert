@@ -24,7 +24,7 @@ const TempAndDetails = ({
       id: 1,
       Icon: FaThermometerEmpty,
       title: "Real Feel",
-      value: `${(feels_like - 273.15).toFixed()}°`,
+      value: `${(feels_like).toFixed()}°`,
     },
     {
       id: 2,
@@ -56,13 +56,13 @@ const TempAndDetails = ({
       id: 3,
       Icon: MdKeyboardArrowUp,
       title: "High",
-      value: `${(temp_max - 273.15).toFixed()}°`,
+      value: `${(temp_max).toFixed()}°`,
     },
     {
       id: 4,
       Icon: MdKeyboardArrowDown,
       title: "Low",
-      value: `${(temp_min - 273.15).toFixed()}°`,
+      value: `${(temp_min).toFixed()}°`,
     },
   ];
 
@@ -73,7 +73,7 @@ const TempAndDetails = ({
         </div>
         <div className="flex flex-row items-center justify-between py-3">
           <img src={icon} alt="weather icon" className="w-20" />
-          <p className="text-5xl">{`${(temp - 273.15).toFixed()}°`}</p>
+          <p className="text-5xl">{`${(temp).toFixed()}°`}</p>
 
           <div className="flex flex-col space-y-3 items-start">
             {verticalDetails.map(({ id, Icon, title, value }) => (
