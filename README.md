@@ -1,8 +1,5 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Clima Expert
+## Weather Application developed using React JS and Tailwind CSS, 
+integrating the OpenWeatherMap API for real-time weather data retrieval, including temperature, max, min,
+real-feel, sunrise, sunset, humidity and hourly and daily forecasts. 
+The app features an intuitive user interface with quick links for city selection and current location-based weather retrieval, ensuring ease of use. Detailed weather information is displayed alongside local time, offering users a comprehensive view of conditions at their selected locations.
